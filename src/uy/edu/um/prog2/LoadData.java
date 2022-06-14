@@ -1,5 +1,6 @@
 package uy.edu.um.prog2;
 
+import uy.edu.um.prog2.Entidades.Brewery;
 import uy.edu.um.prog2.Entidades.Review;
 import uy.edu.um.prog2.adt.linkedlist.MyLinkedListImpl;
 
@@ -21,10 +22,20 @@ public class LoadData {
     }
     */
 
+    // Inicializacion de las estructuras donde guardaremos los datos
+    private MyLinkedListImpl<Review> reviewList = new MyLinkedListImpl<>();
+    private MyLinkedListImpl<Brewery> breweryList = new MyLinkedListImpl<>();
+
+    //Getters de las estructuras
+    public MyLinkedListImpl<Review> getReviewList() {
+        return reviewList;
+    }
+    public MyLinkedListImpl<Brewery> getBreweryList() {return breweryList;}
+
     public LoadData() {
     }
 
-    private static MyLinkedListImpl<Review> LoadReviews() throws IOException {
+    static MyLinkedListImpl<Review> LoadReviews() throws IOException {
         MyLinkedListImpl<Review> reviewList = new MyLinkedListImpl<>();
 
         FileReader fileReader = new FileReader("D:\\Facultad\\Ingeniería Informática\\2do año - 1er semestre 2022\\Programación 2\\Obligatorio\\Obligatorio_P2_2022\\Obligatorio2022-master\\src\\uy\\edu\\um\\prog2\\beer_dataset_test.csv");
