@@ -52,7 +52,7 @@ public class LoadData {
         return null;
     }
 
-    private static MyLinkedListImpl<Review> LoadReviews() throws IOException {
+    public static MyLinkedListImpl<Review> LoadReviews() throws IOException {
         MyLinkedListImpl<Review> reviewList = new MyLinkedListImpl<>();
 
         FileReader fileReader = new FileReader("D:\\Facultad\\Ingeniería Informática\\2do año - 1er semestre 2022\\Programación 2\\Obligatorio\\Obligatorio_P2_2022\\Obligatorio2022-master\\src\\uy\\edu\\um\\prog2\\beer_dataset_test.csv");

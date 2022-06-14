@@ -69,7 +69,7 @@ public class Main {
         }
     }
 
-    public static void consultas (Consultas nuevaConsulta, LoadData newUp){
+    public static void consultas (Consultas nuevaConsulta, LoadData newUp) throws IOException {
         while (true) {
             System.out.println(
                     "\n1.10 casas de cerveza con más reseñas en un año." +
