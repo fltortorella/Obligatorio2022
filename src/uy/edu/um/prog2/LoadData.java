@@ -2,9 +2,11 @@ package uy.edu.um.prog2;
 
 import uy.edu.um.prog2.Entidades.Brewery;
 import uy.edu.um.prog2.Entidades.Review;
+import uy.edu.um.prog2.Entidades.User;
 import uy.edu.um.prog2.adt.linkedlist.MyLinkedListImpl;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
@@ -13,10 +15,24 @@ public class LoadData {
 
     /*
     public static void main(String[] Args) throws IOException {
-        MyLinkedListImpl<Review> reviewList = LoadReviews();
+        // Genero una instancia de la clase LoadData para que en el constructor se llame al método LoadData() y se carguen los datos.
+        long mainStartTime = System.currentTimeMillis(); // Inicio a medir el tiempo que tarda en cargar los datos.
 
+        LoadData pruebaLoadData = new LoadData();
 
-        // Prueba para imprimir las reviews:
+        MyLinkedListImpl<Review> reviewList = LoadData.getReviewList();
+        MyLinkedListImpl<Brewery> breweryList = LoadData.getBreweryList();
+        MyLinkedListImpl<User> userList = LoadData.getUserList();
+
+        long mainEndTime = System.currentTimeMillis(); // Finalizo la medición del tiempo que tarda en cargar los datos.
+        // System.out.println("Tiempo que toma la carga de los datos: " + (mainEndTime - mainStartTime) + " milisegundos."); // Imprimo el tiempo que tarda en la carga de los datos.
+
+        // Para imprimir los usuarios:
+        for (int i = 0; i < userList.size(); i++) {
+            System.out.println("Nombre: " + userList.get(i).getUsername());
+        }
+
+        // Para imprimir las reviews:
         for (int i = 0; i < reviewList.size(); i++) {
             System.out.println("ID: " + reviewList.get(i).getId() +
                                 ", Date: " + reviewList.get(i).getDate() +
@@ -26,36 +42,43 @@ public class LoadData {
                                 ", Flavour: " + reviewList.get(i).getFlavourScore());
         }
 
-
-        // Cantidad de reviews (los registros del csv que tuvieran algún campo vacío no se convirtieron a instancia de review):
-        System.out.println(reviewList.size());
+        // Para imprimir las brewerys:
+        for (int i = 0; i < breweryList.size(); i++) {
+            System.out.println("ID: " + breweryList.get(i).getId() +
+                    ", Name: " + breweryList.get(i).getName());
+        }
     }
     */
 
-    /*
+    public LoadData() throws IOException {
+        this.LoadData();
+    }
+
     // Se inicializan las estructuras en donde irán las distintas entidades.
-    private MyLinkedListImpl<Review> reviewList = new MyLinkedListImpl<>();
-    private MyLinkedListImpl<Brewery> breweryList = new MyLinkedListImpl<>();
-    */
+    private static MyLinkedListImpl<User> userList = new MyLinkedListImpl<>();
+    private static MyLinkedListImpl<Review> reviewList = new MyLinkedListImpl<>();
+    private static MyLinkedListImpl<Brewery> breweryList = new MyLinkedListImpl<>();
 
-    public LoadData() {
+
+    //Getters de las estructuras.
+    public static MyLinkedListImpl<User> getUserList() {
+        return userList;
     }
-
-    //Getters de las estructuras
-    public MyLinkedListImpl<Review> getReviewList() throws IOException {
-        MyLinkedListImpl<Review> reviewList = LoadReviews();
+    public static MyLinkedListImpl<Review> getReviewList() throws IOException {
         return reviewList;
     }
-
-    public MyLinkedListImpl<Brewery> getBreweryList() {
-        // return breweryList;
-        return null;
+    public static MyLinkedListImpl<Brewery> getBreweryList() {
+        return breweryList;
     }
 
-    public static MyLinkedListImpl<Review> LoadReviews() throws IOException {
-        MyLinkedListImpl<Review> reviewList = new MyLinkedListImpl<>();
+    public void LoadData() throws IOException {
+        MyLinkedListImpl<String> userNameList = new MyLinkedListImpl<>(); // Lista para guardar los distintos nombres usuarios para no repetir entidades.
+        MyLinkedListImpl<Long> breweryIdList = new MyLinkedListImpl<>(); // Lista para guardar los distintos ID's de las brewerys para no repetir entidades.
 
-        FileReader fileReader = new FileReader("D:\\Facultad\\Ingeniería Informática\\2do año - 1er semestre 2022\\Programación 2\\Obligatorio\\Obligatorio_P2_2022\\Obligatorio2022-master\\src\\uy\\edu\\um\\prog2\\beer_dataset_test.csv");
+        // Para la carga de datos utilizo las siguientes líneas de código.
+        String filePath = new File("").getAbsolutePath(); // Devuelve el path absoluto.
+        String csvPath = filePath + "\\src\\uy\\edu\\um\\prog2\\beer_dataset_test.csv"; // Al path absoluto le concateno el path hasta el archivo csv.
+        FileReader fileReader = new FileReader(csvPath);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
         // Salto la primera fila que contiene los títulos.
@@ -66,8 +89,6 @@ public class LoadData {
 
         // Creo un array de 14 elementos, en cada uno de sus elementos irá cada columna del csv al momento de iterarlo.
         String[] atributos = new String[14];
-
-        int emptyCount = 0; // Contador de líneas del csv en donde faltan datos.
 
         // Recorro cada línea del csv hasta. Cuando se termina el csv, readLine() devuelve null.
         while (line != null) {
@@ -142,7 +163,7 @@ public class LoadData {
                 double appearanceScore = Double.parseDouble(atributos[6]);
 
                 // Campo 7: "review_profilename".
-                String reviewProfilename = atributos[7];
+                String reviewProfileName = atributos[7];
 
                 // Campo 8: "beer_style".
                 String beerStyle = atributos[8];
@@ -162,21 +183,31 @@ public class LoadData {
                 // Campo 13: "beer_beerid".
                 long BeerId = Long.parseLong(atributos[13]);
 
-                // Creo una instancia de la clase Review para la linea actual del csv.
-                Review review = new Review(reviewId, date, overallScore, aromaScore, appearanceScore, reviewPalate);
 
-                // Agrego la nueva instancia de la clase Review a la lista.
-                reviewList.add(review);
-            } else {
-                emptyCount += 1;
+                // Creo las instancias y las agrego a sus respectivos TADs.
+
+                // Instancia de User.
+                if (!userNameList.contains(reviewProfileName)) { // Si la lista de nombres de usuario ya recorridos no contiente al de la línea actual del csv.
+                    userNameList.add(reviewProfileName); // Lo agrego a la lista de usuarios ya vistos.
+                    User user = new User(reviewProfileName); // Creo la instancia de la clase User para la línea actual del csv.
+                    userList.add(user); // Agrego laa nueva instancia de la clase User a su lista.
+                }
+
+                // Instancia de Review.
+                Review review = new Review(reviewId, date, overallScore, aromaScore, appearanceScore, reviewPalate); // Creo la instancia de la clase Review para la línea actual del csv.
+                reviewList.add(review); // Agrego la nueva instancia de la clase Review a su lista.
+
+                // Instancia de Brewery.
+                if (!breweryIdList.contains(breweryId)) { // Si la lista de ID's de brewery ya recorridas no contiene a la de la línea actual del csv.
+                    breweryIdList.add(breweryId); // Agrego el ID de brewery de la línea actual del csv a la lista de ID's de brewery.
+                    Brewery brewery = new Brewery(breweryId, breweryName); // Creo la instancia de la clase Brewery para la línea actual del csv.
+                    breweryList.add(brewery); // Agrego la nueva instancia de la clase Brewery a su lista.
+                }
+
             }
 
             // Leo la próxima línea del csv.
             line = bufferedReader.readLine();
         }
-
-        // System.out.println("Líneas de reviews con datos vacíos: " + emptyCount);
-
-        return reviewList;
     }
 }
