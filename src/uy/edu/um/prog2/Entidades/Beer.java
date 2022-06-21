@@ -1,25 +1,19 @@
 package uy.edu.um.prog2.Entidades;
 
+import uy.edu.um.prog2.adt.linkedlist.MyLinkedListImpl;
+
 public class Beer {
 
     private long id;
     private String name;
     private double abv;
     private Style style;
+    private MyLinkedListImpl<Review> beerReviewList;
 
     public Beer(long id, String name, double abv) {
         this.id = id;
         this.name = name;
         this.abv = abv;
-        // this.style = new Style(); // FIXME para definir que el atributo style sea una instancia de la clase Style es necesario pasarle como atributo el nombre del style.
-    }
-
-    public Style getStyle() {
-        return style;
-    }
-
-    public void setStyle(Style style) {
-        this.style = style;
     }
 
     public long getId() {
@@ -44,5 +38,21 @@ public class Beer {
 
     public void setAbv(double abv) {
         this.abv = abv;
+    }
+
+    public Style getStyle() {
+        return style;
+    }
+
+    public void setStyle(Style style) {
+        this.style = style;
+    }
+
+    public MyLinkedListImpl<Review> getBeerReviewList() {
+        return beerReviewList;
+    }
+
+    public void setBeerReviewList(MyLinkedListImpl<Review> beerReviewList) {
+        this.beerReviewList = beerReviewList;
     }
 }
