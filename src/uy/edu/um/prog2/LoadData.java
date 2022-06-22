@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 
 public class LoadData {
@@ -30,11 +31,12 @@ public class LoadData {
         System.out.println("Finaliza la carga.");
 
         System.out.println("Tiempo que toma la carga de los datos: " + (mainEndTime - mainStartTime) + " milisegundos."); // Imprimo el tiempo que tarda en la carga de los datos.
-        */
+        //*/
 
         /*
         // Para imprimir los usuarios:
         System.out.println("Se tienen " + userList.size() + " distintos usuarios.");
+        /*
         for (int i = 0; i < userList.size(); i++) {
             System.out.println("- Nombre: " + userList.get(i).getUsername());
         }
@@ -43,6 +45,7 @@ public class LoadData {
         /*
         // Para imprimir los estilos de cerveza:
         System.out.println("Se tienen " + styleList.size() + " distintos estilos de cerveza:");
+        /*
         for (int i = 0; i < styleList.size(); i++) {
             System.out.println("- " + styleList.get(i).getName());
         }
@@ -51,6 +54,7 @@ public class LoadData {
         /*
         // Para imprimir las cervecerías:
         System.out.println("Se tienen " + breweryList.size() + " distintas cervecerías:");
+        /*
         for (int i = 0; i < breweryList.size(); i++) {
             System.out.println("- ID: " + breweryList.get(i).getId() +
                     ", Nombre: " + breweryList.get(i).getName());
@@ -60,6 +64,7 @@ public class LoadData {
         /*
         // Para imprimir las cervezas:
         System.out.println("Se tienen " + beerList.size() + " distintas cervezas:");
+        /*
         for (int i = 0; i < beerList.size(); i++) {
             System.out.println("- Nombre: " + beerList.get(i).getName() + ", Estilo: " + beerList.get(i).getStyle().getName());
         }
@@ -68,6 +73,7 @@ public class LoadData {
         /*
         // Para imprimir las reviews:
         System.out.println("Se tienen " + reviewList.size() + " distintas reviews.");
+        /*
         for (int i = 0; i < reviewList.size(); i++) {
             System.out.println("- ID: " + reviewList.get(i).getId() +
                                 ", Date: " + reviewList.get(i).getDate() +
@@ -79,6 +85,36 @@ public class LoadData {
                                 ", ID Brewery: " + reviewList.get(i).getBrewery().getId() +
                                 ", Nombre Brewery: " + reviewList.get(i).getBrewery().getName());
         }
+        //*/
+
+        // Cosulta 3.
+        /*
+        long consulta3StartTime = System.currentTimeMillis(); // Inicio a medir el tiempo que tarda en procesarse la consulta 3.
+
+        int cantidadReviews = reviewList.size();
+        int cantidadUsuarios = userList.size();
+        String[] arrayNombreUsuarios = new String[cantidadUsuarios];
+        int[] arrayHistogramaUsuarios = new int[cantidadUsuarios];
+
+        for (int i = 0; i < cantidadUsuarios; i++) {
+            arrayNombreUsuarios[i] = userList.get(i).getUsername();
+        }
+
+        for (int i = 0; i < cantidadReviews; i++) {
+            String nombreUsuario = reviewList.get(i).getUser().getUsername();
+            int indiceNombre = Arrays.asList(arrayNombreUsuarios).indexOf(nombreUsuario);
+            arrayHistogramaUsuarios[indiceNombre] ++;
+        }
+
+        /*
+        for (int i = 0; i < cantidadUsuarios; i++) {
+            System.out.println("Nombre: " + arrayNombreUsuarios[i] + ", Reviews: " + arrayHistogramaUsuarios[i]);
+        }
+        */
+
+        /*
+        long consulta3endTime = System.currentTimeMillis(); // Finalizo de medir el tiempo que tarda en procesarse la consulta 3.
+        System.out.println("Tiempo que toma en procesarse la consulta 3 es de: " + (consulta3endTime - consulta3StartTime) + " milisegundos."); // Imprimo el tiempo que tarda procesarse la consulta 3.
         //*/
     }
 
@@ -122,7 +158,7 @@ public class LoadData {
 
         // Para la carga de datos utilizo las siguientes líneas de código.
         String filePath = new File("").getAbsolutePath(); // Devuelve el path absoluto.
-        String csvPath = filePath + "\\src\\uy\\edu\\um\\prog2\\beer_dataset_microtest.csv"; // Al path absoluto le concateno el path hasta el archivo csv.
+        String csvPath = filePath + "\\src\\uy\\edu\\um\\prog2\\beer_dataset_minitest.csv"; // Al path absoluto le concateno el path hasta el archivo csv.
         FileReader fileReader = new FileReader(csvPath);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
