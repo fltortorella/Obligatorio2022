@@ -77,4 +77,18 @@ public class Review {
     public Brewery getBrewery() { return brewery; }
 
     public void setBrewery(Brewery brewery) { this.brewery = brewery; }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", date=" + date +
+                ", overallScore=" + overallScore +
+                ", aromaScore=" + aromaScore +
+                ", appearanceScore=" + appearanceScore +
+                ", flavourScore=" + flavourScore +
+                ", user=" + user +
+                ", brewery=" + brewery +
+                '}';
+    }
 }

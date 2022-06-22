@@ -51,4 +51,15 @@ public class Beer {
     public void setBeerReviewList(MyLinkedListImpl<Review> beerReviewList) {
         this.beerReviewList = beerReviewList;
     }
+
+    @Override
+    public String toString() {
+        return "Beer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", abv=" + abv +
+                ", style=" + style +
+                ", beerReviewList=" + beerReviewList +
+                '}';
+    }
 }
