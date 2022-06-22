@@ -7,7 +7,7 @@ public class Review {
     private long id;
     private Date date;
     private double overallScore;
-    private double aromaScore; 
+    private double aromaScore;
     private double appearanceScore;
     private double flavourScore;
     private User user;
@@ -70,19 +70,11 @@ public class Review {
         this.flavourScore = flavourScore;
     }
 
-    public User getUser() {
-        return user;
-    }
+    public User getUser() { return user; }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public void setUser(User user) { this.user = user; }
 
-    public Brewery getBrewery() {
-        return brewery;
-    }
+    public Brewery getBrewery() { return brewery; }
 
-    public void setBrewery(Brewery brewery) {
-        this.brewery = brewery;
-    }
+    public void setBrewery(Brewery brewery) { this.brewery = brewery; }
 }

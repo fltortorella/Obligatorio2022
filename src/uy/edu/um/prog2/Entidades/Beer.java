@@ -40,13 +40,9 @@ public class Beer {
         this.abv = abv;
     }
 
-    public Style getStyle() {
-        return style;
-    }
+    public Style getStyle() { return style; }
 
-    public void setStyle(Style style) {
-        this.style = style;
-    }
+    public void setStyle(Style style) { this.style = style; }
 
     public MyLinkedListImpl<Review> getBeerReviewList() {
         return beerReviewList;
