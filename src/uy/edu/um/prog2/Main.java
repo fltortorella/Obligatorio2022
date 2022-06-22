@@ -13,7 +13,7 @@ public class Main {
 
     MyLinkedListImpl<Brewery> breweryList = new MyLinkedListImpl<>();
 
-    private static boolean numberIsCorrect(String cadena, int numeroChico, int numeroGrande) {
+    static boolean numberIsCorrect(String cadena, int numeroChico, int numeroGrande) {
         boolean resultado;
         try {
             Integer.parseInt(cadena);
@@ -31,9 +31,7 @@ public class Main {
 
     public static void cargaDeDatos(LoadData newUp) throws IOException {
         long firstTime = System.nanoTime();
-        newUp.LoadReviews();
-//        newUp.LoadBeers();
-//        newUp.Loadotracosa();
+        newUp.LoadData();
         long lastTime = System.nanoTime();
         long dif2 = lastTime - firstTime;
         double timeTotal = (double) dif2/1000000000;
@@ -93,7 +91,7 @@ public class Main {
 
                 } else if (entradaConsultas.equals("3")) {
 
-                    nuevaConsulta.consulta3();
+                    nuevaConsulta.consulta3(newUp.getReviewList());
 
                 } else if (entradaConsultas.equals("4")) {
 
@@ -101,7 +99,7 @@ public class Main {
 
                 } else if (entradaConsultas.equals("5")) {
 
-                    nuevaConsulta.consulta5();
+                    nuevaConsulta.consulta5(newUp.getBeerList());
 
                 } else { // Ya habia controlado arriba que el numero este entre 1 y 6 por lo que este es el caso de que digite 6.
                     // Vuelve al menu principal

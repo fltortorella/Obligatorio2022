@@ -17,6 +17,7 @@ public class Consultas {
 
     //10 casas de cerveza con más reseñas en un año.
     public void consulta1(MyList<Review> reviewList, MyList<Brewery> breweryList) {
+        long firstTime = System.nanoTime();
         System.out.println("\nIngrese un año");
         Scanner entradaScan = new Scanner(System.in);
         String entrada = entradaScan.nextLine();
@@ -24,29 +25,27 @@ public class Consultas {
             System.out.println("\nDato mal ingresado, intente ingresarlo nuevamente");
         }
         else {
-            long firstTime = System.nanoTime();
             MyList<Brewery> listaTop10 = new MyLinkedListImpl<>();
-            int reviewsminimas = 1;
             Brewery temp = null;
-//        System.out.println(reviewList.size());
-            for (int i = 1; i < reviewList.size(); i++) {
-                temp = reviewList.get(i).getCerveceria();
-//                System.out.println("" + temp);
-                if (listaTop10.contains(temp)) {
-                    // Va ser la misma cerveceria que ya tenia
-                } else { // Este cast member entra al vector y tengo que reoganizarlo
+            for (int i = 0; i < 3; i++) {
+                SimpleDateFormat getYearFormat = new SimpleDateFormat("yyyy");
+                String year = getYearFormat.format(reviewList.get(i).getDate());
+                if (year.equals(entrada)){              // si la review es de ese anio
+                    temp = reviewList.get(i).getBrewery();
                     listaTop10.add(temp);
                 }
+//
             }
             // Imprimo en pantalla lo correspondiente a la consulta 1
-            long lastTime = System.nanoTime();
-            long dif2 = lastTime - firstTime;
-            double timeTotal = (double) dif2 / 1000000000;
-//        for (int k = 0; k < 5; k++) {
-//            System.out.println("\nNombre cerveza: " + listaTop10.get(k).getName() + "\nCantidad de reviews : " + "\n");
-//        }
-            System.out.println("\nTiempo de ejecución de la consulta:" + "\n" + timeTotal);
+            for (int k = 0; k < listaTop10.size(); k++) {
+
+                System.out.println("\nNombre cerveceria: " + listaTop10.get(k).getName() + " Cantidad reviews: ");
+            }
         }
+        long lastTime = System.nanoTime();
+        long dif2 = lastTime - firstTime;
+        double timeTotal = (double) dif2 / 1000000000;
+        System.out.println("\nTiempo de ejecución de la consulta:" + "\n" + timeTotal);
         }
 
         public void consulta2 () {
@@ -54,24 +53,22 @@ public class Consultas {
         }
 
         public void consulta3 (MyList<Review> reviewList) {
+            int count = 0;
             System.out.println("Introduzca la fecha inicio con formato dd/mm/yyyy");
             Date fechaInicio = pruebaFecha();
-            System.out.println("Introduzca la fecha fin con formato dd/mm/yyyy");
+            System.out.println("Introduzca la fecha fin con formato dd/mm/yyyy");       // no incluye ese dia
             Date fechaFin = pruebaFecha();
             if (fechaInicio != null && fechaFin != null) {
                 long firstTime = System.nanoTime();
-                MyList<Review> lista = new MyLinkedListImpl<>();
                 for (int i = 0; i < reviewList.size(); i++) {
                     if (reviewList.get(i).getDate().before(fechaFin) && reviewList.get(i).getDate().after(fechaInicio)) {
-                        lista.add(reviewList.get(i));
+                        count++;
                     }
                 }
                 long lastTime = System.nanoTime();
                 long dif2 = lastTime - firstTime;
                 double timeTotal = (double) dif2 / 1000000000;
-                for (int i = 0; i<lista.size(); i++){
-                    System.out.println("Review " + lista.get(i).getId() + " Fecha" + lista.get(i).getDate());
-                }
+                System.out.println("Cantidad de reviews dento del rango ingresado: " + count);
                 System.out.println("\nTiempo de ejecución de la consulta:" + "\n" + timeTotal);
             } else {
                 System.out.println("Intente nuevamente");
@@ -81,9 +78,10 @@ public class Consultas {
         public void consulta4 () {
             System.out.println("haciendo consulta 4");
         }
+
         public void consulta5 (MyList<Beer> beerList) {
             for (int i = 0; i < beerList.size(); i++){
-                // FIXME
+//                beerList.get(i).g
             }
         }
 
