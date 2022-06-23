@@ -13,39 +13,37 @@ import java.util.Scanner;
 public class Consultas {
 
     // Consulta 1: las 10 cervecerías con más reseñas en un año dado.
-    public static void consulta1(MyList<Review> reviewList, MyList<Brewery> breweryList) {
-        System.out.println("Consulta 1");
-        /*
-        long firstTime = System.nanoTime();
-        System.out.println("\nIngrese un año");
-        Scanner entradaScan = new Scanner(System.in);
-        String entrada = entradaScan.nextLine();
-        if (!numberIsCorrect(entrada, 1900, 2022)) {
-            System.out.println("\nDato mal ingresado, intente ingresarlo nuevamente");
-        }
-        else {
-            MyList<Brewery> listaTop10 = new MyLinkedListImpl<>();
-            Brewery temp = null;
-            for (int i = 0; i < 3; i++) {
-                SimpleDateFormat getYearFormat = new SimpleDateFormat("yyyy");
-                String year = getYearFormat.format(reviewList.get(i).getDate());
-                if (year.equals(entrada)){              // si la review es de ese anio
-                    temp = reviewList.get(i).getBrewery();
-                    listaTop10.add(temp);
-                }
-//
-            }
-            // Imprimo en pantalla lo correspondiente a la consulta 1
-            for (int k = 0; k < listaTop10.size(); k++) {
+    public static void consulta1(int year) {
+        long consulta1StartTime = System.currentTimeMillis();
 
-                System.out.println("\nNombre cerveceria: " + listaTop10.get(k).getName() + " Cantidad reviews: ");
+        MyHashImpl<Long, Brewery> breweryHash = LoadData.getBreweryHash();
+        int cerveceríasTotales = breweryHash.size();
+        MyList<Brewery> breweryList = breweryHash.values();
+        MyHeapImpl<Brewery> breweryHeap = new MyHeapImpl<>(false);
+
+        for (int i = 0; i < cerveceríasTotales; i++) {
+            breweryList.get(i).setTotalReviewByYear(year); // Al correr esta operación sobre la cervecería de la iteración actual, se actualiza su número de reviews en el año del parámetro "year", en su variable "reviewsEnDeterminadoAño".
+            breweryHeap.insert(breweryList.get(i));
+        }
+
+        boolean hayReseñasAño = false;
+
+        System.out.println("Top 10 de cervecerías con más reseñas en el año " + year + ":");
+        for (int i = 0; i < 15; i++) {
+            Brewery breweryTop = breweryHeap.get();
+            breweryHeap.delete();
+            if (breweryTop.getReviewsEnDeterminadoAño() > 0) {
+                hayReseñasAño = true;
+                System.out.println("\t" + (i + 1) + ". Nombre: " + breweryTop.getName() + " | Reseñas: " + breweryTop.getReviewsEnDeterminadoAño());
             }
         }
-        long lastTime = System.nanoTime();
-        long dif2 = lastTime - firstTime;
-        double timeTotal = (double) dif2 / 1000000000;
-        System.out.println("\nTiempo de ejecución de la consulta:" + "\n" + timeTotal);
-        */
+
+        if (!hayReseñasAño) {
+            System.out.println("\tNo hay reseñas para el año seleccionado.");
+        }
+
+        long consulta1EndTime = System.currentTimeMillis();
+        System.out.println("\nTiempo que toma en procesarse la consulta 1: " + (consulta1EndTime - consulta1StartTime) + " milisegundos.");
     }
 
     // Consulta 2: top 15 catadores con más reseñas.
@@ -133,33 +131,28 @@ public class Consultas {
     }
 
     // consulta 5: top 5 cervezas con más reviews.
-    public static void consulta5 (MyList<Beer> beerList) {
-        System.out.println("Consulta 5");
-        /*
-        for (int i = 0; i < beerList.size(); i++){
-//                beerList.get(i).g
-        }
-        */
-    }
+    public static void consulta5 () {
+        long consulta5StartTime = System.currentTimeMillis();
 
-    /*
-    public Date pruebaFecha() {
-        Scanner sc = new Scanner(System.in);
-        String fecha = sc.nextLine();
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        Date testDate = null;
-        String date = fecha;
-        try{
-            testDate = df.parse(date);
-            if (!df.format(testDate).equals(date)){
-                System.out.println("Fecha invalida");
-            } else {
-                return testDate;
-            }
-        } catch (Exception e){ System.out.println("Formato invalido");}
-        return null;
+        MyHashImpl<Long, Beer> beerHash = LoadData.getBeerHash();
+        int cervezasTotales = beerHash.size();
+        MyList<Beer> beerList = beerHash.values();
+        MyHeapImpl<Beer> beerHeap = new MyHeapImpl<>(false);
+
+        for (int i = 0; i < cervezasTotales; i++) {
+            beerHeap.insert(beerList.get(i));
+        }
+
+        System.out.println("Top 5 de cervezas con más reseñas:");
+        for (int i = 0; i < 5; i++) {
+            Beer beerTop = beerHeap.get();
+            beerHeap.delete();
+            System.out.println("\t" + (i + 1) + ". Cerveza: " + beerTop.getName() + " | Reseñas: " + beerTop.getTotalReviews());
+        }
+
+        long consulta5EndTime = System.currentTimeMillis();
+        System.out.println("\nTiempo que toma en procesarse la consulta 5: " + (consulta5EndTime - consulta5StartTime) + " milisegundos.");
     }
-    */
 }
 
 

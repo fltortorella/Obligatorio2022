@@ -245,6 +245,14 @@ public class LoadData {
                 // Campo 13: "beer_beerid".
                 long beerId = Long.parseLong(atributos[13]);
 
+                /*
+                // Prueba para ver los datos luego de transformarlos:
+                System.out.println("ID: " + reviewId + " - Brewery_id: " + breweryId + " - Brewery_name: " + breweryName +
+                                    " - Review_time: " + date + " - Review_overall: " + overallScore + " - Review_aroma: " + aromaScore +
+                                    " - Review_appearance: " + appearanceScore + " - Review_profilename: " + reviewProfileName + " - Beer_style: " + beerStyle +
+                                    " - Review_palate: " + reviewPalate + " - Review_taste: " + reviewTaste + " - Beer_name: " + beerName +
+                                    " - Beer_abv: " + beerAbv + " - Beer_beerid: " +  beerId);
+                //*/
 
                 // Creo las instancias y las agrego a sus respectivos TADs.
 
@@ -287,6 +295,7 @@ public class LoadData {
                 Beer currentReviewBeer = beerHash.get(beerId); // Busco la instancia de Beer correspondiente a esta review en la tabla hash de las cervezas.
                 currentReviewBeer.addToBeerReviewList(review); // Agrego la review de esta iteración a la linked list de reviews para la cerveza correspondiente a esta iteración.
                 currentReviewUser.addToUserReviewList(review); // Agrego la review de esta iteración a la linked list de reviews para el usuario correspondiente a esta iteración.
+                currentReviewBrewery.addToBreweryReviewList(review); // Agrego la review de esta iteración a la linked list de reviews para la cervecería correspondiente a esta iteración.
             }
 
             // Leo la próxima línea del csv.

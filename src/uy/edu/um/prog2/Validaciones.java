@@ -1,5 +1,9 @@
 package uy.edu.um.prog2;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
+
 public class Validaciones {
 
     public static boolean numberIsCorrect (String numeroString, int numeroinferior, int numerosuperior) {

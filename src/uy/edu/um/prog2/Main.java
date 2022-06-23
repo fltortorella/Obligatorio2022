@@ -39,8 +39,26 @@ public class Main {
                 System.out.println("Dato mal ingresado, intente ingresarlo nuevamente");
             } else { // En este caso va a ejectuarse la consulta
                 if (entradaConsultas.equals("1")) {
-                    // Se corre la consulta 1.
-                    // Consultas.consulta1();
+                    System.out.println("\nIngrese un año entre 1996 y 2012: ");
+                    // Leo lo que introduce el usuario.
+                    Scanner entradaAñoConsultaUno = new Scanner(System.in);
+                    String añoConsulta1String = entradaAñoConsultaUno.nextLine();
+                    int añoConsulta1Int = 0;
+                    boolean datoAñoCorrecto = false;
+
+                    try {
+                        añoConsulta1Int = Integer.parseInt(añoConsulta1String);
+                        if (!Validaciones.numberIsCorrect(añoConsulta1String, 1996, 2012)) {
+                            System.out.println("No hay datos para el año ingresado, pruebe con un año entre 1996 y 2012.");
+                        } else {
+                            // Se corre la consulta 1.
+                            Consultas.consulta1(añoConsulta1Int);
+                        }
+
+                    } catch (NumberFormatException excepcion) {
+                        System.out.println("\nDato mal ingresado, intente ingresarlo nuevamente");
+                    }
+
                 } else if (entradaConsultas.equals("2")) {
                     // Se corre la consulta 2.
                     Consultas.consulta2();
@@ -52,7 +70,7 @@ public class Main {
                     Consultas.consulta4();
                 } else if (entradaConsultas.equals("5")) {
                     // Se corre la consulta 5.
-                    // Consultas.consulta5();
+                    Consultas.consulta5();
                 } else { // Ya habia controlado arriba que el numero este entre 1 y 6 por lo que este es el caso de que digite 6.
                     // Vuelve al menu principal
                     break;
