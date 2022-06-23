@@ -42,7 +42,7 @@ public class LoadData {
         /*
         MyList<User> userList = userHash.values();
         for (int i = 0; i < cantidadUsuarios; i++) {
-            System.out.println("- Nombre: " + userList.get(i).getUsername() + " | Reviews: " + userList.get(i).getNumeroReviews());
+            System.out.println(userList.get(i));
         }
         //*/
 
@@ -76,15 +76,7 @@ public class LoadData {
         /*
         MyList<Beer> beerList = beerHash.values();
         for (int i = 0; i < cantidadCervezas; i++) {
-            String reviewsID = "";
-            for (int j = 0; j < beerList.get(i).getBeerReviewList().size(); j++) {
-                reviewsID += beerList.get(i).getBeerReviewList().get(j).getId() + " ";
-            }
-            System.out.println("- ID: " + beerList.get(i).getId() +
-                               " | Nombre: " + beerList.get(i).getName() +
-                               " | ABV: " + beerList.get(i).getAbv() +
-                               " | Estilo: " + beerList.get(i).getStyle().getName() +
-                               " | Aparece en: " + beerList.get(i).getBeerReviewList().size() + " reviews: " + reviewsID);
+            System.out.println(beerList.get(i));
         }
         //*/
 
