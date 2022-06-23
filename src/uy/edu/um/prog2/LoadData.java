@@ -3,6 +3,7 @@ package uy.edu.um.prog2;
 import uy.edu.um.prog2.Entidades.*;
 import uy.edu.um.prog2.adt.hash.MyHash;
 import uy.edu.um.prog2.adt.hash.MyHashImpl;
+import uy.edu.um.prog2.adt.heap.MyHeapImpl;
 import uy.edu.um.prog2.adt.linkedlist.MyLinkedListImpl;
 import uy.edu.um.prog2.adt.linkedlist.MyList;
 
@@ -53,7 +54,7 @@ public class LoadData {
         /*
         MyList<Style> styleList = styleHash.values();
         for (int i = 0; i < cantidadEstilos; i++) {
-            System.out.println("- " + styleList.get(i).getName());
+            System.out.println(styleList.get(i));
         }
         //*/
 
@@ -72,7 +73,7 @@ public class LoadData {
         /*
         // Para imprimir las cervezas:
         int cantidadCervezas = beerHash.size();
-        System.out.println("Se tienen " + cantidadCervezas + " distintas cervezas:");
+        System.out.println("Se tienen " + cantidadCervezas + " distintas cervezas.");
         /*
         MyList<Beer> beerList = beerHash.values();
         for (int i = 0; i < cantidadCervezas; i++) {
@@ -99,35 +100,63 @@ public class LoadData {
         }
         //*/
 
-        // Cosulta 3.
+        //System.out.println("");
+
+        // Cosulta 2.
         /*
-        long consulta3StartTime = System.currentTimeMillis(); // Inicio a medir el tiempo que tarda en procesarse la consulta 3.
+        long consulta2StartTime = System.currentTimeMillis(); // Inicio a medir el tiempo que tarda en procesarse la consulta 2.
 
-        int cantidadReviews = reviewList.size();
-        int cantidadUsuarios = userList.size();
-        String[] arrayNombreUsuarios = new String[cantidadUsuarios];
-        int[] arrayHistogramaUsuarios = new int[cantidadUsuarios];
+        int usuariosTotales = userHash.size();
 
-        for (int i = 0; i < cantidadUsuarios; i++) {
-            arrayNombreUsuarios[i] = userList.get(i).getUsername();
+        MyList<User> usersList = userHash.values();
+        MyHeapImpl<User> userHeap = new MyHeapImpl<>(false);
+        for (int i = 0; i < usuariosTotales; i++) {
+            userHeap.insert(usersList.get(i));
         }
 
-        for (int i = 0; i < cantidadReviews; i++) {
-            System.out.println(i);
-            String nombreUsuario = reviewList.get(i).getUser().getUsername();
-            int indiceNombre = Arrays.asList(arrayNombreUsuarios).indexOf(nombreUsuario);
-            arrayHistogramaUsuarios[indiceNombre] ++;
+        System.out.println("Top 15 de usuarios con más reseñas:");
+        for (int i = 0; i < 15; i++) {
+            String space;
+            if ((i + 1) < 10) {
+                space = " ";
+            } else {
+                space = "";
+            }
+            User usuarioTop = userHeap.get();
+            userHeap.delete();
+            System.out.println("\t" + space + (i + 1) + ". Username: " + usuarioTop.getUsername() + " | Reseñas: " + usuarioTop.getTotalReviews());
         }
 
-        ///*
-        for (int i = 0; i < cantidadUsuarios; i++) {
-            System.out.println("Nombre: " + arrayNombreUsuarios[i] + ", Reviews: " + arrayHistogramaUsuarios[i]);
-        }
+        long consulta2EndTime = System.currentTimeMillis(); // Finalizo de medir el tiempo que tarda en procesarse la consulta 2.
+        System.out.println("Tiempo que toma en procesarse la consulta 2 es de: " + (consulta2EndTime - consulta2StartTime) + " milisegundos."); // Imprimo el tiempo que tarda procesarse la consulta 2.
         //*/
 
+        //System.out.println("");
+
+        // Consulta 4.
         /*
-        long consulta3endTime = System.currentTimeMillis(); // Finalizo de medir el tiempo que tarda en procesarse la consulta 3.
-        System.out.println("Tiempo que toma en procesarse la consulta 3 es de: " + (consulta3endTime - consulta3StartTime) + " milisegundos."); // Imprimo el tiempo que tarda procesarse la consulta 3.
+        long consulta4StartTime = System.currentTimeMillis(); // Inicio a medir el tiempo que tarda en procesarse la consulta 4.
+
+        MyList<Style> stylesList = styleHash.values();
+        int estilosTotales = styleHash.size();
+        for (int i = 0; i < estilosTotales; i++) {
+            double promedioAromaStyle = stylesList.get(i).getPromedioAromaStyle(); // Cada vez que llamo a la operación getPromedioAromaStyle() se calcula la variable "aromaPromedio" para la instancia de Style de la iteración actual, por eso la variable no se utiliza, pero la función se llama de todas formas.
+        }
+
+        MyHeapImpl<Style> styleHeap = new MyHeapImpl<>(false);
+        for (int i = 0; i < estilosTotales; i++) {
+            styleHeap.insert(stylesList.get(i));
+        }
+
+        System.out.println("Top 7 de estilos de cerveza con mejor aroma:");
+        for (int i = 0; i < 7; i++) {
+            Style styleTop = styleHeap.get();
+            styleHeap.delete();
+            System.out.println("\t" + (i + 1) + ". Estilo: " + styleTop.getName() + " | Aroma promedio: " + styleTop.getAromaPromedio());
+        }
+
+        long consulta4EndTime = System.currentTimeMillis(); // Finalizo de medir el tiempo que tarda en procesarse la consulta 4.
+        System.out.println("Tiempo que toma en procesarse la consulta 4 es de: " + (consulta4EndTime - consulta4StartTime) + " milisegundos."); // Imprimo el tiempo que tarda procesarse la consulta 4.
         //*/
     //}
 
@@ -167,7 +196,7 @@ public class LoadData {
 
         // Para la carga de datos utilizo las siguientes líneas de código.
         String filePath = new File("").getAbsolutePath(); // Devuelve el path absoluto.
-        String csvPath = filePath + "\\src\\uy\\edu\\um\\prog2\\beer_dataset_full.csv"; // Al path absoluto le concateno el path hasta el archivo csv.
+        String csvPath = filePath + "\\src\\uy\\edu\\um\\prog2\\beer_dataset_microtest.csv"; // Al path absoluto le concateno el path hasta el archivo csv.
         FileReader fileReader = new FileReader(csvPath);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
@@ -282,10 +311,7 @@ public class LoadData {
                 // Instancia de User.
                 if (!userHash.contains(reviewProfileName)) { // Si la tabla hash de usuarios ya recorridos no contiente al de la iteración actual.
                     User user = new User(reviewProfileName); // Creo una nueva instancia de User con el usuario de la iteración actual.
-                    user.nuevaReview(); // A la intancia de User le sumo una review al contador de reviews.
                     userHash.put(reviewProfileName, user); // Agrego la nueva instancia de User a su tabla hash.
-                } else { // Si la tabla hash de usuarios ya recorridos ya contiene al de la iteración actual.
-                    userHash.get(reviewProfileName).nuevaReview(); // A la instancia de User de la iteración actual le sumo una review al contador de reviews.
                 }
 
                 // Instancia de Style.
@@ -306,6 +332,8 @@ public class LoadData {
                     Style currentBeerStyle = styleHash.get(beerStyle); // Busco la intancia Style correspondiente a esta cerveza en la tabla hash de estilos de cerveza.
                     beer.setStyle(currentBeerStyle); // Le asigno la intancia Style encontrada a la intancia de Beer de la iteración actual.
                     beerHash.put(beerId, beer); // Agrego la nueva instancia de Beer a su tabla hash.
+
+                    currentBeerStyle.addToStyleBeerList(beer); // Agrego la cerveza de esta iteración a la linked list de cervezas para el estilo correspondiente a esta iteración.
                 }
 
                 // Instancia de Review.
@@ -315,8 +343,10 @@ public class LoadData {
                 Brewery currentReviewBrewery = breweryHash.get(breweryId); // Busco la instancia Brewery correspondiente a esta review en la tabla hash de cervecerías.
                 review.setBrewery(currentReviewBrewery); // Le asigno la instancia Brewery encontrada a la instancia de Review de la iteración actual.
                 reviewHash.put(reviewId, review); // Agrego la nueva instancia de Review a su tabla hash.
-                Beer currentReviewBeer = beerHash.get(beerId);
-                currentReviewBeer.addToBeerReviewList(review);
+
+                Beer currentReviewBeer = beerHash.get(beerId); // Busco la instancia de Beer correspondiente a esta review en la tabla hash de las cervezas.
+                currentReviewBeer.addToBeerReviewList(review); // Agrego la review de esta iteración a la linked list de reviews para la cerveza correspondiente a esta iteración.
+                currentReviewUser.addToUserReviewList(review); // Agrego la review de esta iteración a la linked list de reviews para el usuario correspondiente a esta iteración.
             }
 
             // Leo la próxima línea del csv.
