@@ -1,9 +1,11 @@
 package uy.edu.um.prog2.Entidades;
 
+import uy.edu.um.prog2.adt.linkedlist.MyLinkedListImpl;
+
 public class User {
 
     private String username;
-    private int numeroReviews = 0;
+    private MyLinkedListImpl<Review> userReviewList = new MyLinkedListImpl<>();
 
     public User(String username) {
         this.username = username;
@@ -17,22 +19,28 @@ public class User {
         this.username = username;
     }
 
-    public int getNumeroReviews() {
-        return numeroReviews;
+    public MyLinkedListImpl<Review> getUserReviewList() {
+        return userReviewList;
     }
 
-    public void setNumeroReviews(int numeroReviews) {
-        this.numeroReviews = numeroReviews;
+    public void setUserReviewList(MyLinkedListImpl<Review> userReviewList) {
+        this.userReviewList = userReviewList;
     }
 
-    public void nuevaReview() {
-        this.numeroReviews ++;
+    public void addToUserReviewList(Review review) {
+        this.userReviewList.add(review);
     }
 
     @Override
     public String toString() {
+        int cantidadReviews = this.getUserReviewList().size();
+        String reviewsId = "";
+        for (int i = 0; i < cantidadReviews; i++) {
+            reviewsId += this.getUserReviewList().get(i).getId() + " ";
+        }
+
         return "User: " +
                 "Username: " + this.username +
-                " | Reviews: " + this.numeroReviews;
+                " | Escribió: " + cantidadReviews + " reviews: " + reviewsId;
     }
 }
