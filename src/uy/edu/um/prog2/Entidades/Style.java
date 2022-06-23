@@ -53,7 +53,7 @@ public class Style implements Comparable<Style> {
         return beerId;
     }
 
-    public double getPromedioAromaStyle() {
+    public void getPromedioAromaStyle() {
         double aromaTotal = 0;
         int reviewsTotalesStyle = 0;
         int beersTotales = this.getTotalBeers();
@@ -68,8 +68,6 @@ public class Style implements Comparable<Style> {
         double aromaPromedioStyle = aromaTotal / reviewsTotalesStyle;
 
         this.setAromaPromedio(aromaPromedioStyle);
-
-        return aromaPromedioStyle;
     }
 
     @Override // Sobreescribo la operación de comparar instancias para utilizarlo en el heap.

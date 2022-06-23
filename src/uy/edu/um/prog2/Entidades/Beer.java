@@ -2,7 +2,7 @@ package uy.edu.um.prog2.Entidades;
 
 import uy.edu.um.prog2.adt.linkedlist.MyLinkedListImpl;
 
-public class Beer {
+public class Beer implements Comparable<Beer> {
 
     private long id;
     private String name;
@@ -85,5 +85,10 @@ public class Beer {
                 " | ABV: " + this.getAbv() +
                 " | Style: " + this.getStyle().getName() +
                 " | Aparece en " + this.getTotalReviews() + " review/s: " + this.printAllReviewsId();
+    }
+
+    @Override // Sobreescribo la operación de comparar instancias para utilizarlo en el heap.
+    public int compareTo(Beer beer) {
+        return Integer.compare(this.getBeerReviewList().size(), beer.getBeerReviewList().size());
     }
 }
