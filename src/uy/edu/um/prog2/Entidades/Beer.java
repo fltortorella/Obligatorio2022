@@ -52,18 +52,38 @@ public class Beer {
         this.beerReviewList.add(review);
     }
 
-    @Override
-    public String toString() {
-        int cantidadReviews = this.getBeerReviewList().size();
+    public int getTotalReviews() {
+        return this.getBeerReviewList().size();
+    }
+
+    public String printAllReviewsId() {
         String reviewsId = "";
-        for (int i = 0; i < cantidadReviews; i++) {
+        int reviewTotales = this.getTotalReviews();
+        for (int i = 0; i < reviewTotales; i++) {
             reviewsId += this.getBeerReviewList().get(i).getId() + " ";
         }
+        return reviewsId;
+    }
+
+    public double getPromedioAromaBeer() {
+        double aromaTotal = 0;
+        int reviewsTotales = this.getTotalReviews();
+
+        for (int i = 0; i < reviewsTotales; i++) {
+            aromaTotal += this.getBeerReviewList().get(i).getAromaScore();
+        }
+
+        double aromaPromedioBeer = aromaTotal / reviewsTotales;
+        return aromaPromedioBeer;
+    }
+
+    @Override
+    public String toString() {
         return "Beer: " +
-                "ID: " + this.id +
-                " | Name: " + this.name +
-                " | ABV: " + this.abv +
+                "ID: " + this.getId() +
+                " | Name: " + this.getName() +
+                " | ABV: " + this.getAbv() +
                 " | Style: " + this.getStyle().getName() +
-                " | Aparece en " + cantidadReviews + " review/s: " + reviewsId;
+                " | Aparece en " + this.getTotalReviews() + " review/s: " + this.printAllReviewsId();
     }
 }
