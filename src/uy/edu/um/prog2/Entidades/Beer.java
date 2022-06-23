@@ -8,7 +8,7 @@ public class Beer {
     private String name;
     private double abv;
     private Style style;
-    private MyLinkedListImpl<Review> beerReviewList;
+    private MyLinkedListImpl<Review> beerReviewList = new MyLinkedListImpl<>();
 
     public Beer(long id, String name, double abv) {
         this.id = id;
@@ -44,22 +44,26 @@ public class Beer {
 
     public void setStyle(Style style) { this.style = style; }
 
-    public MyLinkedListImpl<Review> getBeerReviewList() {
-        return beerReviewList;
-    }
+    public MyLinkedListImpl<Review> getBeerReviewList() { return beerReviewList; }
 
-    public void setBeerReviewList(MyLinkedListImpl<Review> beerReviewList) {
-        this.beerReviewList = beerReviewList;
+    public void setBeerReviewList(MyLinkedListImpl<Review> beerReviewList) { this.beerReviewList = beerReviewList; }
+
+    public void addToBeerReviewList(Review review) {
+        this.beerReviewList.add(review);
     }
 
     @Override
     public String toString() {
-        return "Beer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", abv=" + abv +
-                ", style=" + style +
-                ", beerReviewList=" + beerReviewList +
-                '}';
+        int cantidadReviews = this.getBeerReviewList().size();
+        String reviewsId = "";
+        for (int i = 0; i < cantidadReviews; i++) {
+            reviewsId += this.getBeerReviewList().get(i).getId() + " ";
+        }
+        return "Beer: " +
+                "ID: " + this.id +
+                " | Name: " + this.name +
+                " | ABV: " + this.abv +
+                " | Style: " + this.getStyle().getName() +
+                " | Aparece en " + cantidadReviews + " review/s: " + reviewsId;
     }
 }
