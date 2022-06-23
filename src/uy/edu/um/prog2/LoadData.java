@@ -22,7 +22,7 @@ public class LoadData {
         long mainStartTime = System.currentTimeMillis(); // Inicio a medir el tiempo que tarda en cargar los datos.
         System.out.println("Comienza la carga.");
 
-        LoadData pruebaLoadData = new LoadData();
+        LoadData.LoadData();
 
         MyHashImpl<String, User> userHash = LoadData.getUserHash();
         MyHashImpl<String, Style> styleHash = LoadData.getStyleHash();
@@ -99,69 +99,9 @@ public class LoadData {
                                 " | Nombre Brewery: " + reviewList.get(i).getBrewery().getName());
         }
         //*/
-
-        //System.out.println("");
-
-        // Cosulta 2.
-        /*
-        long consulta2StartTime = System.currentTimeMillis(); // Inicio a medir el tiempo que tarda en procesarse la consulta 2.
-
-        int usuariosTotales = userHash.size();
-
-        MyList<User> usersList = userHash.values();
-        MyHeapImpl<User> userHeap = new MyHeapImpl<>(false);
-        for (int i = 0; i < usuariosTotales; i++) {
-            userHeap.insert(usersList.get(i));
-        }
-
-        System.out.println("Top 15 de usuarios con más reseñas:");
-        for (int i = 0; i < 15; i++) {
-            String space;
-            if ((i + 1) < 10) {
-                space = " ";
-            } else {
-                space = "";
-            }
-            User usuarioTop = userHeap.get();
-            userHeap.delete();
-            System.out.println("\t" + space + (i + 1) + ". Username: " + usuarioTop.getUsername() + " | Reseñas: " + usuarioTop.getTotalReviews());
-        }
-
-        long consulta2EndTime = System.currentTimeMillis(); // Finalizo de medir el tiempo que tarda en procesarse la consulta 2.
-        System.out.println("Tiempo que toma en procesarse la consulta 2 es de: " + (consulta2EndTime - consulta2StartTime) + " milisegundos."); // Imprimo el tiempo que tarda procesarse la consulta 2.
-        //*/
-
-        //System.out.println("");
-
-        // Consulta 4.
-        /*
-        long consulta4StartTime = System.currentTimeMillis(); // Inicio a medir el tiempo que tarda en procesarse la consulta 4.
-
-        MyList<Style> stylesList = styleHash.values();
-        int estilosTotales = styleHash.size();
-        for (int i = 0; i < estilosTotales; i++) {
-            double promedioAromaStyle = stylesList.get(i).getPromedioAromaStyle(); // Cada vez que llamo a la operación getPromedioAromaStyle() se calcula la variable "aromaPromedio" para la instancia de Style de la iteración actual, por eso la variable no se utiliza, pero la función se llama de todas formas.
-        }
-
-        MyHeapImpl<Style> styleHeap = new MyHeapImpl<>(false);
-        for (int i = 0; i < estilosTotales; i++) {
-            styleHeap.insert(stylesList.get(i));
-        }
-
-        System.out.println("Top 7 de estilos de cerveza con mejor aroma:");
-        for (int i = 0; i < 7; i++) {
-            Style styleTop = styleHeap.get();
-            styleHeap.delete();
-            System.out.println("\t" + (i + 1) + ". Estilo: " + styleTop.getName() + " | Aroma promedio: " + styleTop.getAromaPromedio());
-        }
-
-        long consulta4EndTime = System.currentTimeMillis(); // Finalizo de medir el tiempo que tarda en procesarse la consulta 4.
-        System.out.println("Tiempo que toma en procesarse la consulta 4 es de: " + (consulta4EndTime - consulta4StartTime) + " milisegundos."); // Imprimo el tiempo que tarda procesarse la consulta 4.
-        //*/
     //}
 
     public LoadData() throws IOException {
-        this.LoadData();
     }
 
     // Se inicializan (con un tamaño conveniente) los TADs en donde irán las distintas entidades.
@@ -192,11 +132,11 @@ public class LoadData {
         return reviewHash;
     }
 
-    public void LoadData() throws IOException {
+    public static void LoadData() throws IOException {
 
         // Para la carga de datos utilizo las siguientes líneas de código.
         String filePath = new File("").getAbsolutePath(); // Devuelve el path absoluto.
-        String csvPath = filePath + "\\src\\uy\\edu\\um\\prog2\\beer_dataset_microtest.csv"; // Al path absoluto le concateno el path hasta el archivo csv.
+        String csvPath = filePath + "\\src\\uy\\edu\\um\\prog2\\beer_dataset_full.csv"; // Al path absoluto le concateno el path hasta el archivo csv.
         FileReader fileReader = new FileReader(csvPath);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
