@@ -8,99 +8,51 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
+//*
+    public static void cargaDeDatos() throws IOException {
+        System.out.println("Comienza la carga de datos.");
+        long startLoadData = System.currentTimeMillis(); // Comienza la medición del tiempo que tarda en cargar los datos.
 
-    MyLinkedListImpl<Review> reviewList = new MyLinkedListImpl<>();
+        LoadData.LoadData(); // Llamo al método estático LoadData() de la clase LoadData.
 
-    MyLinkedListImpl<Brewery> breweryList = new MyLinkedListImpl<>();
+        System.out.println("Finaliza la carga de datos.");
+        long endLoadData = System.currentTimeMillis(); // Finaliza la medición del tiempo que tarda en cargar los datos.
 
-    static boolean numberIsCorrect(String cadena, int numeroChico, int numeroGrande) {
-        boolean resultado;
-        try {
-            Integer.parseInt(cadena);
-            resultado = true;
-        } catch (NumberFormatException excepcion) {
-            resultado = false;
-        }
-        if(resultado){
-            if(!(Integer.parseInt(cadena) >= numeroChico && Integer.parseInt(cadena) <= numeroGrande)){
-                resultado = false;
-            }
-        }
-        return resultado;
+        System.out.println("Tiempo necesario para la carga de los datos: " + (endLoadData - startLoadData) + " milisegundos."); // Imprimo el tiempo que tarda la carga de los datos.
     }
 
-    public static void cargaDeDatos(LoadData newUp) throws IOException {
-        long firstTime = System.nanoTime();
-        newUp.LoadData();
-        long lastTime = System.nanoTime();
-        long dif2 = lastTime - firstTime;
-        double timeTotal = (double) dif2/1000000000;
-        System.out.println("\nCarga de datos exitosa, tiempo de ejecución de la carga:" + timeTotal + "\n");
-    }
-
-    public static void menuInicial() throws IOException {
-        LoadData newUp = null;
-        Consultas nuevaConsulta = new Consultas();
-        while (true) {
-            System.out.println("\nSeleccione la opción que desee:\n1.Carga de datos\n2.Ejecutar consultas\n3.Salir");
-            Scanner entradaScanMenu = new Scanner(System.in);
-            String entradaMenu = entradaScanMenu.nextLine();
-            if (!numberIsCorrect(entradaMenu, 1, 3)) {
-                System.out.println("\nDato mal ingresado, intente ingresarlo nuevamente");
-            }else if (entradaMenu.equals("1")) {
-                if(newUp == null){
-                    newUp = new LoadData();
-                    cargaDeDatos(newUp);
-                }else{
-                    System.out.println("Los datos ya han sido cargados, presione 2 para realizar las consultas");
-                }
-            }else if (entradaMenu.equals("2")) {
-                if(newUp == null){
-                    System.out.println("Debe subirse previamente los datos");
-                }else{
-                    consultas(nuevaConsulta, newUp);
-                }
-            }else { // (NroMenu.equals("3")) Ya habia controlado arriba que el numero este entre 1 y 3 por lo que este es el caso de que digite 3.
-                System.out.println("\nSe terminó el programa");
-                break;
-            }
-        }
-    }
-
-    public static void consultas (Consultas nuevaConsulta, LoadData newUp) throws IOException {
+    public static void consultas () throws IOException {
         while (true) {
             System.out.println(
-                    "\n1.10 casas de cerveza con más reseñas en un año." +
-                    "\n2.Top 15 catadores con más reseñas." +
-                    "\n3.Cantidad de reviews en un rango dado." +
-                    "\n4.Top 7 estilos de cervezas con mejor aroma." +
-                    "\n5.Top 5 cervezas con más review." +
-                    "\n6.Salir.");
+                    "\n1. 10 casas de cerveza con más reseñas en un año." +
+                    "\n2. Top 15 catadores con más reseñas." +
+                    "\n3. Cantidad de reviews en un rango dado." +
+                    "\n4. Top 7 estilos de cervezas con mejor aroma." +
+                    "\n5. Top 5 cervezas con más review." +
+                    "\n6. Salir al menú principal.");
+
+            // Leo lo que introduce el usuario.
             Scanner entradaScanConsultas = new Scanner(System.in);
             String entradaConsultas = entradaScanConsultas.nextLine();
-            if (!numberIsCorrect(entradaConsultas, 1, 6)) {
+
+            if (!Validaciones.numberIsCorrect(entradaConsultas, 1, 6)) {
                 System.out.println("Dato mal ingresado, intente ingresarlo nuevamente");
-            } else {// En este caso va a ejectuarse la consulta
+            } else { // En este caso va a ejectuarse la consulta
                 if (entradaConsultas.equals("1")) {
-
-                    nuevaConsulta.consulta1(newUp.getReviewList(), newUp.getBreweryList());
-
+                    // Se corre la consulta 1.
+                    // Consultas.consulta1();
                 } else if (entradaConsultas.equals("2")) {
-
-                    nuevaConsulta.consulta2();
-
+                    // Se corre la consulta 2.
+                    Consultas.consulta2();
                 } else if (entradaConsultas.equals("3")) {
-
-                    nuevaConsulta.consulta3(newUp.getReviewList());
-
+                    // Se corre la consulta 3.
+                    // Consultas.consulta3();
                 } else if (entradaConsultas.equals("4")) {
-
-                    nuevaConsulta.consulta4();
-
+                    // Se corre la consulta 4.
+                    Consultas.consulta4();
                 } else if (entradaConsultas.equals("5")) {
-
-                    nuevaConsulta.consulta5(newUp.getBeerList());
-
+                    // Se corre la consulta 5.
+                    // Consultas.consulta5();
                 } else { // Ya habia controlado arriba que el numero este entre 1 y 6 por lo que este es el caso de que digite 6.
                     // Vuelve al menu principal
                     break;
@@ -110,6 +62,36 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        menuInicial();
+
+        boolean datosCargados = false;
+
+        while (true) {
+            System.out.println("\nSeleccione la opción que desee:\n\t1. Cargar datos.\n\t2. Ejecutar consultas.\n\t3. Finalizar el programa.");
+
+            // Leo lo que introduce el usuario.
+            Scanner entradaScanMenu = new Scanner(System.in);
+            String entradaMenu = entradaScanMenu.nextLine();
+
+            if (!Validaciones.numberIsCorrect(entradaMenu, 1, 3)) {
+                System.out.println("\nDato mal ingresado, intente ingresarlo nuevamente");
+            } else if (entradaMenu.equals("1")) {
+                if(!datosCargados){
+                    Main.cargaDeDatos();
+                    datosCargados = true;
+                } else {
+                    System.out.println("Los datos ya fueron cargados previamente.");
+                }
+            } else if (entradaMenu.equals("2")) {
+                if(!datosCargados){
+                    System.out.println("Debe cargarse los datos antes de realizar las consultas.");
+                } else {
+                    Main.consultas();
+                }
+            } else { // (NroMenu.equals("3")) Ya habia controlado arriba que el numero este entre 1 y 3 por lo que este es el caso de que digite 3.
+                System.out.println("\nSe terminó el programa.");
+                break;
+            }
+        }
     }
+    //*/
 }
