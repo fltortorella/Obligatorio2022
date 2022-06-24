@@ -77,6 +77,18 @@ public class Beer implements Comparable<Beer> {
         return aromaPromedioBeer;
     }
 
+    public double getPromedioPuntajeGeneral () {
+        double puntajeGeneralTotal = 0;
+        int reviewsTotales = this.getTotalReviews();
+
+        for (int i = 0; i < reviewsTotales; i++) {
+            puntajeGeneralTotal += this.getBeerReviewList().get(i).getOverallScore();
+        }
+
+        double puntajeGeneralPromedioBeer = puntajeGeneralTotal / reviewsTotales;
+        return puntajeGeneralPromedioBeer;
+    }
+
     @Override
     public String toString() {
         return "Beer: " +

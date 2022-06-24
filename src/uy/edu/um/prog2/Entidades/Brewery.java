@@ -1,5 +1,6 @@
 package uy.edu.um.prog2.Entidades;
 
+import uy.edu.um.prog2.adt.hash.MyHashImpl;
 import uy.edu.um.prog2.adt.linkedlist.MyLinkedListImpl;
 
 import java.util.Date;
@@ -8,9 +9,10 @@ public class Brewery implements Comparable<Brewery> {
 
     private long id;
     private String name;
-
     private MyLinkedListImpl<Review> breweryReviewList = new MyLinkedListImpl<>();
-
+    private MyHashImpl<Long, Review> breweryReviewHash = new MyHashImpl<>(50000);
+    private Long[] reviewHashKeysPerBrewery = new Long[50000];
+    private int contadorReviewsPerBrewery = 0;
     private int reviewsEnDeterminadoAño;
 
     public Brewery(long id, String name) {
@@ -42,6 +44,22 @@ public class Brewery implements Comparable<Brewery> {
         this.breweryReviewList = breweryReviewList;
     }
 
+    public MyHashImpl<Long, Review> getBreweryReviewHash() {
+        return breweryReviewHash;
+    }
+
+    public void setBreweryReviewHash(MyHashImpl<Long, Review> breweryReviewHash) {
+        this.breweryReviewHash = breweryReviewHash;
+    }
+
+    public Long[] getReviewHashKeysPerBrewery() {
+        return reviewHashKeysPerBrewery;
+    }
+
+    public void setReviewHashKeysPerBrewery(Long[] reviewHashKeysPerBrewery) {
+        this.reviewHashKeysPerBrewery = reviewHashKeysPerBrewery;
+    }
+
     public int getReviewsEnDeterminadoAño() {
         return reviewsEnDeterminadoAño;
     }
@@ -58,16 +76,24 @@ public class Brewery implements Comparable<Brewery> {
         return this.getBreweryReviewList().size();
     }
 
-
+    public void addKeyToHash(Long reviewId){
+        reviewHashKeysPerBrewery[contadorReviewsPerBrewery] = reviewId;
+        contadorReviewsPerBrewery ++;
+    }
     public void setTotalReviewByYear(int year) {
         int contadorReviewsYear = 0;
         int totalReviews = this.getTotalReviews();
 
         for (int i = 0; i < totalReviews; i++) {
+            long uno = System.currentTimeMillis();
+
             //noinspection deprecation
-            if ((1900 + this.breweryReviewList.get(i).getDate().getYear()) == year) {
+            if ((1900 + this.breweryReviewHash.get(reviewHashKeysPerBrewery[i]).getDate().getYear()) == year) {
                 contadorReviewsYear ++;
             }
+            long dos = System.currentTimeMillis();
+
+            //System.out.println(dos - uno);
         }
 
         this.setReviewsEnDeterminadoAño(contadorReviewsYear);
