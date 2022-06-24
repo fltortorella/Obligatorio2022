@@ -77,30 +77,51 @@ public class Consultas {
     }
 
     // Consulta 3: cantidad de reviews en un período de tiempo dado.
-    public static void consulta3 (MyList<Review> reviewList) {
-        System.out.println("Consulta 3");
-        /*
+    public static void consulta3 () {
+        long firstTime = System.nanoTime();
         int count = 0;
         System.out.println("Introduzca la fecha inicio con formato dd/mm/yyyy");
-        Date fechaInicio = pruebaFecha();
-        System.out.println("Introduzca la fecha fin con formato dd/mm/yyyy");       // no incluye ese dia
-        Date fechaFin = pruebaFecha();
-        if (fechaInicio != null && fechaFin != null) {
-            long firstTime = System.nanoTime();
-            for (int i = 0; i < reviewList.size(); i++) {
-                if (reviewList.get(i).getDate().before(fechaFin) && reviewList.get(i).getDate().after(fechaInicio)) {
-                    count++;
+        Date fechaInicio = Validaciones.pruebaFecha();
+        if (fechaInicio != null) {
+            System.out.println("Introduzca la fecha fin con formato dd/mm/yyyy");       // no incluye ese dia
+            Date fechaFin = Validaciones.pruebaFecha();
+            if (fechaFin != null){
+                MyHashImpl<Long, Review> reviewHash = LoadData.getReviewHash();
+                MyList<Review> reviewsList = reviewHash.values();
+                int cantidadReviewsTotales = reviewHash.size();
+                System.out.println(cantidadReviewsTotales);
+                for (int i = 0; i<cantidadReviewsTotales; i++){
+                    // primera version
+//                    if (reviewsList.get(i).getDate().before(fechaFin) && reviewsList.get(i).getDate().after(fechaInicio)) {
+//                        count++;
+//                    }
+                    SimpleDateFormat getYearFormat = new SimpleDateFormat("yyyy");
+                    Integer yearReview = Integer.valueOf(getYearFormat.format(reviewsList.get(i).getDate()));
+                    Integer yearFIni = Integer.valueOf(getYearFormat.format(fechaInicio));
+                    Integer yearFFin = Integer.valueOf(getYearFormat.format(fechaFin));
+                    if ((yearFIni<= yearReview) && (yearReview <= yearFFin)){
+                        int mesIni = fechaInicio.getMonth();
+                        int mesReview = reviewsList.get(i).getDate().getMonth();
+                        int mesFin = fechaFin.getMonth();
+
+                        if (mesIni <= mesReview && mesReview <= mesFin){
+                            int diaIni = fechaInicio.getDate();
+                            int diaReview = reviewsList.get(i).getDate().getDate();
+                            int diaFin = fechaFin.getDate();
+                            if(diaIni <= diaReview && diaReview <= diaFin){
+                                count++;
+//                                System.out.println("contador " + count + " fecha " + reviewsList.get(i).getDate());
+                            }
+                        }
+                    }
                 }
+                System.out.println("Cantidad de reviews dento del rango ingresado: " + count);
             }
-            long lastTime = System.nanoTime();
-            long dif2 = lastTime - firstTime;
-            double timeTotal = (double) dif2 / 1000000000;
-            System.out.println("Cantidad de reviews dento del rango ingresado: " + count);
-            System.out.println("\nTiempo de ejecución de la consulta:" + "\n" + timeTotal);
-        } else {
-            System.out.println("Intente nuevamente");
         }
-        */
+        long lastTime = System.nanoTime();
+        long dif2 = lastTime - firstTime;
+        double timeTotal = (double) dif2 / 1000000000;
+        System.out.println("\nTiempo de ejecución de la consulta 3:" + "\n" + timeTotal);
     }
 
     // Consulta 4: top 7 estilos de cerveza con mejor aroma.

@@ -22,4 +22,21 @@ public class Validaciones {
         }
         return resultado;
     }
+
+    public static Date pruebaFecha() {
+        Scanner sc = new Scanner(System.in);
+        String fecha = sc.nextLine();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date testDate = null;
+        String date = fecha;
+        try{
+            testDate = df.parse(date);
+            if (!df.format(testDate).equals(date)){
+                System.out.println("Fecha invalida");
+            } else {
+                return testDate;
+            }
+        } catch (Exception e){ System.out.println("Formato invalido");}
+        return null;
+    }
 }

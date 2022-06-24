@@ -64,7 +64,7 @@ public class Main {
                     Consultas.consulta2();
                 } else if (entradaConsultas.equals("3")) {
                     // Se corre la consulta 3.
-                    // Consultas.consulta3();
+                     Consultas.consulta3();
                 } else if (entradaConsultas.equals("4")) {
                     // Se corre la consulta 4.
                     Consultas.consulta4();
