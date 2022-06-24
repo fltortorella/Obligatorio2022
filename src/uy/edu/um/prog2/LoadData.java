@@ -16,6 +16,7 @@ import java.util.Date;
 
 public class LoadData {
 
+    // Main para hacer distintas pruebas.
     //public static void main(String[] Args) throws IOException {
         // Genero una instancia de la clase LoadData para que en el constructor se llame al método LoadData() y se carguen los datos.
         /*
@@ -108,8 +109,10 @@ public class LoadData {
     private static MyHashImpl<String, User> userHash = new MyHashImpl<>(35000);
     private static MyHashImpl<String, Style> styleHash = new MyHashImpl<>(150);
     private static MyHashImpl<Long, Brewery> breweryHash = new MyHashImpl<>(6000);
+    private static Long[] breweryHashKeys = new Long[6000]; // Para guardar las keays de la tabla hash de las brewery.
     private static MyHashImpl<Long, Beer> beerHash = new MyHashImpl<>(60000);
     private static MyHashImpl<Long, Review> reviewHash = new MyHashImpl<>(1600000);
+    private static Long[] reviewHashKeys = new Long[1600000]; // Para guardar las keys de la tabla hash de las reviews.
 
     //Getters de los TADs.
     public static MyHashImpl<String, User> getUserHash() {
@@ -132,6 +135,14 @@ public class LoadData {
         return reviewHash;
     }
 
+    public static Long[] getReviewHashKeys() {
+        return reviewHashKeys;
+    }
+
+    public static Long[] getBreweryHashKeys() {
+        return breweryHashKeys;
+    }
+
     public static void LoadData() throws IOException {
 
         // Para la carga de datos utilizo las siguientes líneas de código.
@@ -148,6 +159,9 @@ public class LoadData {
 
         // Creo un array de 14 elementos, en cada uno de sus elementos irá cada columna del csv al momento de iterarlo.
         String[] atributos = new String[14];
+
+        int contadorReviewsValidas = 0;
+        int contadorBreweryValidas = 0;
 
         // Recorro cada línea del csv hasta. Cuando se termina el csv, readLine() devuelve null.
         while (line != null) {
@@ -272,6 +286,9 @@ public class LoadData {
                 if (!breweryHash.contains(breweryId)) { // Si la tabla hash de ID's de cervecerías ya recorridas no contiene a la de la iteración actual.
                     Brewery brewery = new Brewery(breweryId, breweryName); // Creo una nueva instancia de Brewery con la cervecería de la iteración actual.
                     breweryHash.put(breweryId, brewery); // Agrego la nueva instancia de Brewery a su tabla hash.
+
+                    breweryHashKeys[contadorBreweryValidas] = breweryId; // Guardo las keys en un array para tener un tipo de dato para recorrer más rápido en la consulta 1.
+                    contadorBreweryValidas ++;
                 }
 
                 // Instancia de Beer.
@@ -296,6 +313,12 @@ public class LoadData {
                 currentReviewBeer.addToBeerReviewList(review); // Agrego la review de esta iteración a la linked list de reviews para la cerveza correspondiente a esta iteración.
                 currentReviewUser.addToUserReviewList(review); // Agrego la review de esta iteración a la linked list de reviews para el usuario correspondiente a esta iteración.
                 currentReviewBrewery.addToBreweryReviewList(review); // Agrego la review de esta iteración a la linked list de reviews para la cervecería correspondiente a esta iteración.
+
+                reviewHashKeys[contadorReviewsValidas] = reviewId; // Guardo las keys en un array para tener un tipo de dato para recorrer más rápido en la consulta 3.
+                contadorReviewsValidas ++;
+
+                currentReviewBrewery.getBreweryReviewHash().put(reviewId, review);
+                currentReviewBrewery.addKeyToHash(reviewId);
             }
 
             // Leo la próxima línea del csv.

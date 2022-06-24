@@ -18,23 +18,29 @@ public class Consultas {
 
         MyHashImpl<Long, Brewery> breweryHash = LoadData.getBreweryHash();
         int cerveceríasTotales = breweryHash.size();
-        MyList<Brewery> breweryList = breweryHash.values();
+        Long[] breweryList = LoadData.getBreweryHashKeys();
         MyHeapImpl<Brewery> breweryHeap = new MyHeapImpl<>(false);
 
         for (int i = 0; i < cerveceríasTotales; i++) {
-            breweryList.get(i).setTotalReviewByYear(year); // Al correr esta operación sobre la cervecería de la iteración actual, se actualiza su número de reviews en el año del parámetro "year", en su variable "reviewsEnDeterminadoAño".
-            breweryHeap.insert(breweryList.get(i));
+            breweryHash.get(breweryList[i]).setTotalReviewByYear(year); // Al correr esta operación sobre la cervecería de la iteración actual, se actualiza su número de reviews en el año del parámetro "year", en su variable "reviewsEnDeterminadoAño".
+            breweryHeap.insert(breweryHash.get(breweryList[i]));
         }
 
         boolean hayReseñasAño = false;
 
         System.out.println("Top 10 de cervecerías con más reseñas en el año " + year + ":");
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 10; i++) {
+            String space;
+            if ((i + 1) < 10) {
+                space = " ";
+            } else {
+                space = "";
+            }
             Brewery breweryTop = breweryHeap.get();
             breweryHeap.delete();
             if (breweryTop.getReviewsEnDeterminadoAño() > 0) {
                 hayReseñasAño = true;
-                System.out.println("\t" + (i + 1) + ". Nombre: " + breweryTop.getName() + " | Reseñas: " + breweryTop.getReviewsEnDeterminadoAño());
+                System.out.println("\t" + space + (i + 1) + ". ID: " + breweryTop.getId() +  " | Nombre: " + breweryTop.getName() + " | Reseñas: " + breweryTop.getReviewsEnDeterminadoAño());
             }
         }
 
@@ -77,51 +83,45 @@ public class Consultas {
     }
 
     // Consulta 3: cantidad de reviews en un período de tiempo dado.
-    public static void consulta3 () {
-        long firstTime = System.nanoTime();
-        int count = 0;
-        System.out.println("Introduzca la fecha inicio con formato dd/mm/yyyy");
-        Date fechaInicio = Validaciones.pruebaFecha();
-        if (fechaInicio != null) {
-            System.out.println("Introduzca la fecha fin con formato dd/mm/yyyy");       // no incluye ese dia
-            Date fechaFin = Validaciones.pruebaFecha();
-            if (fechaFin != null){
-                MyHashImpl<Long, Review> reviewHash = LoadData.getReviewHash();
-                MyList<Review> reviewsList = reviewHash.values();
-                int cantidadReviewsTotales = reviewHash.size();
-                System.out.println(cantidadReviewsTotales);
-                for (int i = 0; i<cantidadReviewsTotales; i++){
-                    // primera version
-//                    if (reviewsList.get(i).getDate().before(fechaFin) && reviewsList.get(i).getDate().after(fechaInicio)) {
-//                        count++;
-//                    }
-                    SimpleDateFormat getYearFormat = new SimpleDateFormat("yyyy");
-                    Integer yearReview = Integer.valueOf(getYearFormat.format(reviewsList.get(i).getDate()));
-                    Integer yearFIni = Integer.valueOf(getYearFormat.format(fechaInicio));
-                    Integer yearFFin = Integer.valueOf(getYearFormat.format(fechaFin));
-                    if ((yearFIni<= yearReview) && (yearReview <= yearFFin)){
-                        int mesIni = fechaInicio.getMonth();
-                        int mesReview = reviewsList.get(i).getDate().getMonth();
-                        int mesFin = fechaFin.getMonth();
+    public static void consulta3 (Date startDate, Date endDate) {
+        long consulta3StartTime = System.currentTimeMillis();
 
-                        if (mesIni <= mesReview && mesReview <= mesFin){
-                            int diaIni = fechaInicio.getDate();
-                            int diaReview = reviewsList.get(i).getDate().getDate();
-                            int diaFin = fechaFin.getDate();
-                            if(diaIni <= diaReview && diaReview <= diaFin){
-                                count++;
-//                                System.out.println("contador " + count + " fecha " + reviewsList.get(i).getDate());
-                            }
-                        }
-                    }
+        //noinspection deprecation
+        int startDateYear = 1900 + startDate.getYear();
+        //noinspection deprecation
+        int startDateMonth = 1 + startDate.getMonth();
+        //noinspection deprecation
+        int startDateDay = startDate.getDate();
+
+        //noinspection deprecation
+        int endDateYear = 1900 + endDate.getYear();
+        //noinspection deprecation
+        int endDateMonth = 1 + endDate.getMonth();
+        //noinspection deprecation
+        int endDateDay = endDate.getDate();
+
+        String stringStartDate = String.valueOf(startDateDay) + "/" + String.valueOf(startDateMonth) + "/" + String.valueOf(startDateYear);
+        String stringEndDate = String.valueOf(endDateDay) + "/" + String.valueOf(endDateMonth) + "/" + String.valueOf(endDateYear);
+
+        int contadorReviewsFechas = 0;
+        MyHashImpl<Long, Review> reviewHash = LoadData.getReviewHash();
+        int reviewTotales = reviewHash.size();
+        Long[] reviewKeyList = LoadData.getReviewHashKeys();
+
+        for (int i = 0; i < reviewTotales; i++) {
+            Date reviewDate = reviewHash.get(reviewKeyList[i]).getDate();
+
+            if (reviewDate.equals(startDate) || reviewDate.after(startDate)) {
+                if (reviewDate.equals(endDate) || reviewDate.before(endDate)) {
+                    contadorReviewsFechas ++;
                 }
-                System.out.println("Cantidad de reviews dento del rango ingresado: " + count);
             }
         }
-        long lastTime = System.nanoTime();
-        long dif2 = lastTime - firstTime;
-        double timeTotal = (double) dif2 / 1000000000;
-        System.out.println("\nTiempo de ejecución de la consulta 3:" + "\n" + timeTotal);
+
+        System.out.println("\tCantidad de reviews entre las fechas " + stringStartDate + " y " + stringEndDate + ": " + contadorReviewsFechas);
+        long consulta3EndTime = System.currentTimeMillis();
+        System.out.println("\nTiempo que toma en procesarse la consulta 3: " + (consulta3EndTime - consulta3StartTime) + " milisegundos.");
+
     }
 
     // Consulta 4: top 7 estilos de cerveza con mejor aroma.
@@ -144,7 +144,7 @@ public class Consultas {
         for (int i = 0; i < 7; i++) {
             Style styleTop = styleHeap.get();
             styleHeap.delete();
-            System.out.println("\t" + (i + 1) + ". Estilo: " + styleTop.getName() + " | Aroma promedio: " + styleTop.getAromaPromedio());
+            System.out.println("\t" + (i + 1) + ". Estilo: " + styleTop.getName() + " | Aroma promedio: " + String.format("%.4f", styleTop.getAromaPromedio()));
         }
 
         long consulta4EndTime = System.currentTimeMillis();
@@ -168,7 +168,7 @@ public class Consultas {
         for (int i = 0; i < 5; i++) {
             Beer beerTop = beerHeap.get();
             beerHeap.delete();
-            System.out.println("\t" + (i + 1) + ". Cerveza: " + beerTop.getName() + " | Reseñas: " + beerTop.getTotalReviews());
+            System.out.println("\t" + (i + 1) + ". Cerveza: " + beerTop.getName() + " | Reseñas: " + beerTop.getTotalReviews() + " | Puntaje general promedio: " + String.format("%.4f", beerTop.getPromedioPuntajeGeneral()));
         }
 
         long consulta5EndTime = System.currentTimeMillis();
